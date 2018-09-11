@@ -1,3 +1,5 @@
+#-*-coding:utf-8-*-
+
 from log import logger
 from analyze import analyze
 
@@ -12,6 +14,7 @@ import ssl
 ssl._create_default_https_context = ssl._create_unverified_context
 
 console = logger()
+analyzer = analyze()
 
 class my_htmlparser(HTMLParser):
     def __init__(self, i_my_url):
@@ -121,11 +124,11 @@ class contentparser:
             return [False, parser.next_urls]
 
         # print for debug
+        '''
         console.log('Title: ' + parser.title, console.debug)
         console.log('Time: ' + parser.mtime, console.debug)
         console.log('Content: ' + parser.mtext, console.debug)
+        '''
 
         # analyzer
-        analyzer = analyze()
-
         return analyzer.handle([parser.title, parser.mtime, parser.mtext])
