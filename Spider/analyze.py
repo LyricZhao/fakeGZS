@@ -16,6 +16,9 @@ class analyze:
         time = page[1].strip(' ')
         content = re.sub('\s','', page[2])
 
+        if len(title) == 0:
+            return None
+
         # cut
         title_word_list = jieba.cut_for_search(title)
         content_word_list = jieba.cut(content, cut_all = False)
