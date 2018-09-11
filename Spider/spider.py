@@ -70,8 +70,8 @@ class Spider:
 if __name__ == "__main__":
     console.log("Starting Spider ...", console.info)
     debug_mode = False
-    if debug_mode: spider = Spider(['http://www.xinhuanet.com/world/2018-09/11/c_129950763.htm', 1, 1])
-    else: spider = Spider(['http://www.xinhuanet.com', 1000, 10])
+    if debug_mode: spider = Spider(['http://www.xinhuanet.com/world/2018-09/11/c_129950763.htm', 1, 5])
+    else: spider = Spider(['http://www.xinhuanet.com', 1000, 4])
     spider.run()
     db.flush()
     console.log("Finished !", console.info)

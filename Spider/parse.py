@@ -76,10 +76,10 @@ class my_htmlparser(HTMLParser):
 
 class contentparser:
     def __init__(self):
-        self.allowed_part = ['politics', 'local', 'legal', 'world', 'mil', 'gangao', 'tw']
-        self.forbidden_part = ['leaders', 'renshi', 'xhll', 'video', 'overseas', \
-                          'fortune', 'auto', 'house', 'tech', 'energy', 'photo', \
-                          'comments', 'caipiao', 'money', 'sports', 'foods',\
+        self.allowed_part = ['politics', 'local', 'legal', 'world', 'mil', 'gangao', 'tw', \
+                             'fortune', 'auto', 'house', 'tech', 'energy']
+        self.forbidden_part = ['leaders', 'renshi', 'xhll', 'video', 'overseas', 'photo', \
+                          'comments', 'caipiao', 'money', 'sports', 'foods', \
                           'travel', 'health', 'datanews', 'gongyi', 'expo', 'abroad', \
                           'power', 'culture', 'jiadian', 'jiaju', 'foto', 'city']
 
