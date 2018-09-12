@@ -12,7 +12,7 @@ class sqldb:
     def __init__(self, db_path, clean):
         self.dict = {}
         self.counter = 0
-        self.commit_rate = 1
+        self.commit_rate = 50
 
         # database
         if clean:

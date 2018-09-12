@@ -5,5 +5,6 @@ from . import view
 urlpatterns = [
     url(r'^$', view.index),
     url(r'^search$', view.search),
-    url(r'^page$', view.page)
+    url(r'^page$', view.page),
+    url(r'^debug$', view.debug)
 ]

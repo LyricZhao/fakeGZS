@@ -16,6 +16,7 @@ class sqldb:
         self.content_ratio = 0.2
         self.user_freq = []
         self.freq_max = 50
+        self.max_brief_length = 75
         if not os.path.exists(db_path):
             raise RuntimeError('ERROR: The database file does not exist.')
         self.db = sqlite3.connect(db_path)
@@ -69,11 +70,16 @@ class sqldb:
     def get_title(self, id):
         return self.pages[id - 1][2]
 
+    def get_brief(self, id):
+        content = (self.pages[id - 1][4]).strip()
+        content.encode('utf-8')
+        return content[0 : min(self.max_brief_length, len(content))] + u"..."
+
     def get_time(self, id):
         return self.pages[id - 1][3]
 
     def get_content(self, id):
-        return self.pages[id - 1][4].split(u'    ')
+        return self.pages[id - 1][4].split()
 
     def get_keys_merged(self, id):
         keys_arr = self.pages[id - 1][5].split('+')
