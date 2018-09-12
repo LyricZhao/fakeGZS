@@ -37,7 +37,7 @@
 						<ul class="SearchResultsList SearchResults-list js-searchResultsList u-md-size-8-12" id="results-Support-ul" aria-labelledby="paginationLabelText">
 
 							{% for item in item_list %}
-							<li class="SearchResult SearchResult--document"><a class="SearchResult-headingLink" href="{{ item.url }} "><h2 class="SearchResult-heading"> {{ item.title }} </h2><p class="SearchResult-description"><span class="SearchResult-date"> {{ item.date }} </span><span>{% autoescape off %} {{ item.brief }} {% endautoescape off %}</span></p><div class="SearchResult-url"> {{ iter.url }} </div></a></li>
+							<li class="SearchResult SearchResult--document"><a class="SearchResult-headingLink" href="{{ item.url }} "><h2 class="SearchResult-heading"> {{ item.title }} </h2><p class="SearchResult-description"><span class="SearchResult-date"> {{ item.date }} </span><span>{% autoescape off %} {{ item.brief }} {% endautoescape off %}</span></p></a></li>
 							{% endfor %}
 
 							<input type="hidden" id="invokeDTM" value="invokeDTM"></ul>

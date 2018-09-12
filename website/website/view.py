@@ -26,7 +26,7 @@ def highlight(content, keys):
     for key in keys:
         if content.count(key):
             content = (u'<strong>' + key + u'</strong>').join(content.split(key))
-        return content    
+    return content
 
 def get_item_list(ids, l, r, keys):
     if len(ids) == 0: return None
@@ -62,6 +62,7 @@ def search(request):
         text = text[26 : len(text)]
 
     strongs, ids = engine.search_item(text, time_filter)
+    strongs = list(strongs)
     total_pages = len(ids) / max_arts_per_page
     cur_arts_num = max_arts_per_page
     if len(ids) % max_arts_per_page > 0:
