@@ -12,7 +12,7 @@ console = logger()
 class analyze:
     def handle(self, page):
         # page = title, time, content
-        title = re.sub('\s','', page[0])
+        title = re.sub('\s', '', page[0])
         time = page[1].strip(' ')
         content = re.sub('\s','', page[2])
 

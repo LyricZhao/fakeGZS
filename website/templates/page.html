@@ -1,0 +1,51 @@
+<html lang="zh-CN" dir="ltr" data-reactroot="">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title lang="zh-CN"> {{ news_title }} </title>
+  <link rel="stylesheet" href="static/app-ht.css" defer="" type="text/css" media="all">
+</head>
+
+<body itemscope="" itemtype="https://schema.org/TechArticle" class="ac-gn-current-support no-js">
+  <div id="app">
+    <div data-reactroot="">
+      <section class="section section-content undefined">
+        <div>
+          <div class="column small-12 medium-12 large-12 large-centered text-center">
+            <div class="main" role="main" id="howto-section">
+              <div id="content"><h1 id="howto-title" itemprop="headline"> {{ news_title }} </h1>
+                <div class="intro">
+                  <p>{{ keywords }}</p>
+                </div>
+                <div id="sections" itemprop="articleBody">
+                  <div>
+                    <div class="extra-react-div">
+                      {% for para in main_content %}
+                      <p style="text-indent: 40px;"> {{ para }} </p>
+                      {% endfor %}
+                    </div>
+                  </div>
+                  <div>
+                    <div class="extra-react-div">
+                      <p><img alt="" src="static/divider.png"></p>
+                    </div>
+                  </div>
+                  <div><h2>推荐阅读</h2>
+                    <div class="extra-react-div">
+                      {% for item in extend_list %}
+                         <p style="margin-left: 40px;"> <a href="{{ item.link }}"> {{ item.title }} </a> </p>
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
+                <div class="mod-date"><span>发布日期：</span>&nbsp;<time> {{ mod_date }} </time></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</body>
+
+</html>
