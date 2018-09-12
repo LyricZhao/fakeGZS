@@ -15,6 +15,7 @@ class sqldb:
         self.keys_ratio = 0.4
         self.content_ratio = 0.2
         self.user_freq = []
+        self.freq_max = 50
         if not os.path.exists(db_path):
             raise RuntimeError('ERROR: The database file does not exist.')
         self.db = sqlite3.connect(db_path)
@@ -60,7 +61,7 @@ class sqldb:
         return 1 <= int(id) and int(id) <= len(self.pages)
 
     def format_url(self, title, link):
-        return {'link': link, 'title': title}    
+        return {'link': link, 'title': title}
 
     def get_url(self, id):
         return 'page?id=' + str(id)
@@ -72,7 +73,7 @@ class sqldb:
         return self.pages[id - 1][3]
 
     def get_content(self, id):
-        return self.pages[id - 1][4].split(u'　　')
+        return self.pages[id - 1][4].split(u'    ')
 
     def get_keys_merged(self, id):
         keys_arr = self.pages[id - 1][5].split('+')
@@ -139,7 +140,7 @@ class sqldb:
         for i in range(0, 5):
             news.append(heap.get()[1])
         news.reverse()
-        return  [self.format_url(self.get_title(it), self.get_url(it)) for it in news]
+        return [self.format_url(self.get_title(it), self.get_url(it)) for it in news]
 
     def push_in_freq(self, key):
         for i in range(0, len(self.user_freq)):
@@ -149,9 +150,9 @@ class sqldb:
         self.user_freq.append((1, key))
 
     def order_freq(self):
-        if len(self.user_freq) <= 10: return
         self.user_freq.sort(reverse = True)
-        self.user_freq = self.user_freq[0: 10]
+        if len(self.user_freq) <= self.freq_max: return
+        self.user_freq = self.user_freq[0: self.freq_max]
 
     def visit(self, id):
         keys_arr = self.pages[id - 1][5].split('+')
@@ -161,4 +162,4 @@ class sqldb:
 
     def get_extend_list(self):
         user_appt = [it[1] for it in self.user_freq]
-        return self.recommand_news(user_appt)
+        return self.recommand_news(user_appt[0 : min(10, len(user_appt))])
