@@ -28,10 +28,16 @@
 #### Environments
 
 - Local Compiling Environment
+
   - macOS 10.13.4
   - Python 2.7.15
   - Django 1.11.15
   - jieba 0.39
+
+
+#### Index Page
+
+![](http://otxp6khet.bkt.clouddn.com/gzs/s0.png)
 
 
 
