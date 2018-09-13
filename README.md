@@ -158,7 +158,7 @@
 
   - The filter function is used to describe the simarlity of a news and the keywords given. The function is defined like this:
 
-    $f(page, keywords) = (\Sigma_{key}t(page, key) * title\_ratio) + (\Sigma_{key}c(page, key) * content\_ratio)+(\Sigma_{key}k(page, key) * key\_ratio )$
+    $f(page, keywords) = ((\Sigma_{key}t(page, key) * title\_ratio) + (\Sigma_{key}c(page, key) * content\_ratio)+(\Sigma_{key}k(page, key) * key\_ratio ))/key\_tot$
 
     $t(page, key)=page.title.count(key)$
 
