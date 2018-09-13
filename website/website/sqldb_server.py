@@ -15,7 +15,7 @@ class sqldb:
         self.keys_ratio = 0.4
         self.content_ratio = 0.2
         self.user_freq = []
-        self.freq_max = 50
+        self.freq_max = 40
         self.max_brief_length = 75
         if not os.path.exists(db_path):
             raise RuntimeError('ERROR: The database file does not exist.')
@@ -149,10 +149,15 @@ class sqldb:
         return [self.format_url(self.get_title(it), self.get_url(it)) for it in news]
 
     def push_in_freq(self, key):
+        min_val = 2**20
         for i in range(0, len(self.user_freq)):
             if self.user_freq[i][1] == key:
                 self.user_freq[i] = (self.user_freq[i][0] + 1, key)
                 return
+            elif self.user_freq[i][0] < min_val:
+                min_val = self.user_freq[i][0]
+        for i in range(0, len(self.user_freq)):
+            self.user_freq[i] = (self.user_freq[i][0] - min_val, self.user_freq[i][1])
         self.user_freq.append((1, key))
 
     def order_freq(self):
