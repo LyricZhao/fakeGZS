@@ -24,6 +24,8 @@ def debug(request):
     return HttpResponse('How did you find here?')
 
 def highlight(content, keys):
+    if keys == None:
+        return content
     for key in keys:
         if content.count(key):
             content = (u'<strong>' + key + u'</strong>').join(content.split(key))
@@ -92,6 +94,43 @@ def search(request):
 
     return render(request, 'result.html', mapped)
 
+def all(request):
+    request.encoding = 'utf-8'
+
+    page_no = 1
+    if 'pager' in request.GET:
+        page_str = str(request.GET['pager'])
+        if not page_str.isdigit():
+            return HttpResponse('ERROR 404')
+        page_no = int(request.GET['pager'])
+
+    strongs, ids = engine.search_item(None, None, True)
+    total_pages = len(ids) / max_arts_per_page
+    cur_arts_num = max_arts_per_page
+    if len(ids) % max_arts_per_page > 0:
+        total_pages += 1
+
+    if page_no > total_pages and len(ids) != 0:
+        return HttpResponse('ERROR 404')
+    if page_no == total_pages:
+        if len(ids) % max_arts_per_page > 0:
+            cur_arts_num = len(ids) % max_arts_per_page
+        else:
+            cur_arts_num = max_arts_per_page
+
+    rangeL = (page_no - 1) * max_arts_per_page
+    rangeR = rangeL + cur_arts_num
+
+    mapped = {}
+    mapped['page_title'] = u"Index-fakeGZS"
+    mapped['user_input'] = u""
+    mapped['result_count'] = str(len(ids))
+    mapped['item_list'] = get_item_list(ids, rangeL, rangeR, strongs)
+    mapped['current_page'] = str(page_no)
+    mapped['total_pages'] = str(total_pages)
+
+    return render(request, 'show.html', mapped)
+
 def page(request):
     request.encoding = 'utf-8'
     if 'id' in request.GET:
@@ -107,6 +146,6 @@ def page(request):
     mapped['keywords'] = engine.get_keys_merged(id)
     mapped['mod_date'] = engine.get_time(id)
     mapped['main_content'] = engine.get_content(id)
-    mapped['extend_list'] = engine.get_extend_list()
+    mapped['extend_list'] = engine.get_extend_list(id)
 
     return render(request, 'page.html', mapped)

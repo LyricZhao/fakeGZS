@@ -7,6 +7,8 @@
 - A summer programming training project, 2018 Summer.
 - Github: https://github.com/LyricZhao/fakeGZS
 
+![](http://otxp6khet.bkt.clouddn.com/gzs/s2.jpeg)
+
 
 
 #### Features
@@ -131,7 +133,7 @@
   - Then the page will be throwed into an analyzer to analyze the content of page.
     - If the page is a news, analyzer will return the analyzed data to the spider.
     - If not, analyzer will return the urls which the page related to, and the spider will continue to crawl the urls.
-  - When the spider receive data of a news page, the spider will call class sqldb to save the data into a cache, when the number of the pending data is reaching a value, the sqldb will commit to the database file.
+  - When the spider receive data of a news page, the spider will call class sqldb to save the data into a cache, when the number of the pending data is reaching a value, the sqldb will cut the words of the title and content and then commit to the database file.
   - The database has two tables including the content table and the dictionary table.
     - The connent table will record the detailed data of the pages.
     - The dictionary table will record entries like (keyword, page-id), which is used for inverted indexing algorithm.
@@ -139,3 +141,70 @@
   - The *pages.db* is a result of 2 hours' running of the spider, all the parts I specified are crawled.
     - The number of the pages is about 5k.
     - The number of entries in the dictionary is about 1500k.
+
+![](http://otxp6khet.bkt.clouddn.com/gzs/s1.png)
+
+
+
+- Engine
+
+  - After user inputs a sentence, the engine will call jieba to cut the sentence to words, and each word will look up in the dictionary and get the set of entries. Finally these sets will be merged into one, then go through the filter function and return.
+
+  - The filter function is used to describe the simarlity of a news and the keywords given. The function is defined like this:
+
+    $f(page, keywords) = (\Sigma_{key}t(page, key) * title\_ratio) + (\Sigma_{key}c(page, key) * content\_ratio)+(\Sigma_{key}k(page, key) * key\_ratio )$
+
+    $t(page, key)=page.title.count(key)$
+
+    $c(page,key)=[page.content.count(key)>1]$
+
+    $k(page, key)= if(key\ in\ page.key)\ importance(key)\ else\ 0$
+
+    - And finally if the value is greater than the value you set, the result will be showed.
+    - The function is the one that I tried without thinking ... but the final effect is pretty good.
+    - $importance(key)$ is exactly the *key_score* array in sqldb_server.py.
+    - I found that sometimes the information I wanna get is in the title, but also sometimes in the content, and even the keyword appearing in the content doesn't mean that it is very related, so I also let the similarity of the keywords themselves count for a part.
+    - Extracting the keywords is using the jieba, **td-idf** algorithm.
+
+  - For the recommanding system:
+
+    -  I use a queue to maintain the keysword that the user recently or frequently visits, when a new word is put in the queue, if the size of queue is reaching max size, the new word will replace the lowest level word.
+    - If a user visits a news page, the system will call the similarity function to find the highest five pages and recommand to the user.
+    - I tested the system several times and always got a really good result.
+
+    ![](http://otxp6khet.bkt.clouddn.com/gzs/s4.png)
+
+  - For the CSS file and JavaScript, I haven't learned about this, all are copied from the website of apple.com...
+
+#### About the code
+
+- Spider/analyze.py
+  - analyze
+
+
+
+#### Performance
+
+- The searching algorithm is $O(nlogn)$, where $n$ is the amount of the result pages.
+
+- And I did several simple test:
+
+  - macOS 10.13.6
+  - Intel Core i7, 2.8 GHz
+
+  | Keyword | Time used         | Entries found |
+  | ------- | ----------------- | ------------- |
+  | 朝鲜    | 0.000443935394287 | 12            |
+  | 习近平  | 0.00294089317322  | 69            |
+  | 经济    | 0.0130569934845   | 137           |
+  | 中国    | 0.0205409526825   | 336           |
+
+  ![](http://otxp6khet.bkt.clouddn.com/gzs/s3.png)
+
+- Not so fast...
+
+- In fact, I had already wrote an entire search engine before with Gu Yuxian, spider in Python, core in C++, 5k LoC, and that one is call GZ Searcher, that why I call this one fakeGZS.
+
+
+
+#### Thanks for reading

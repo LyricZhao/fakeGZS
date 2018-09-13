@@ -15,7 +15,7 @@ class sqldb:
         self.keys_ratio = 0.4
         self.content_ratio = 0.2
         self.user_freq = []
-        self.freq_max = 40
+        self.freq_max = 10
         self.max_brief_length = 75
         if not os.path.exists(db_path):
             raise RuntimeError('ERROR: The database file does not exist.')
@@ -106,12 +106,24 @@ class sqldb:
             content_count += (content.count(key) > 0)
         return (self.title_ratio * title_count + self.content_ratio * content_count + self.keys_ratio * rkeys_count) / (1.0 * keys_count)
 
+    def cmp(self, a, b):
+        ya = int(a[0 : 4]); yb = int(b[0 : 4])
+        if ya != yb: return ya < yb
+        ya = int(a[5 : 7]); yb = int(b[5 : 7])
+        if ya != yb: return ya < yb
+        ya = int(a[8 : 10]); yb = int(b[8 : 10])
+        if ya != yb: return ya < yb
+        return True
+
     def pass_time_filter(self, item, time_filter):
         if time_filter == None: return True
         para_time = self.pages[item][3]
-        return time_filter[0] <= para_time and para_time <= time_filter[1]
+        return (self.cmp(time_filter[0], para_time[0 : 10]) & self.cmp(para_time[0 : 10], time_filter[1]))
 
-    def search_item(self, keyword, time_filter = None):
+    def search_item(self, keyword, time_filter = None, rtnall = False):
+        if rtnall:
+            return None, range(1, len(self.pages) + 1)
+
         keys = re.sub("[\s+\.\!\/_,$%^*(+\"\']+|[+——！，。？、~@#￥%……&*·（）：；【】“”]+".decode('utf8'), "".decode('utf8'), keyword)
         key_list = list(jieba.cut_for_search(keys))
         key_arr = []
@@ -126,7 +138,8 @@ class sqldb:
         pairs = []
         keys_count = len(key_list)
         for item in result_set:
-            if not self.pass_time_filter(item, time_filter): continue
+            if self.pass_time_filter(item - 1, time_filter) == False:
+                continue
             sim = self.count_sim(key_list, item - 1)
             if sim > self.keys_limit:
                 pairs.append((sim, item))
@@ -171,6 +184,6 @@ class sqldb:
             self.push_in_freq(key)
         self.order_freq()
 
-    def get_extend_list(self):
-        user_appt = [it[1] for it in self.user_freq]
-        return self.recommand_news(user_appt[0 : min(10, len(user_appt))])
+    def get_extend_list(self, id):
+        keys_arr = self.pages[id - 1][5].split('+')
+        return self.recommand_news(keys_arr)

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title> {{ page_title }} </title>
+	<link rel="stylesheet" href="static/result_files/fonts" type="text/css" media="all">
+	<link rel="stylesheet" href="static/result_files/fonts(1)" type="text/css" media="all">
+	<link rel="stylesheet" href="static/result_files/base_new.css" type="text/css">
+	<link rel="stylesheet" href="static/result_files/support.css" type="text/css">
+	<link rel="stylesheet" href="static/result_files/ac-globalfooter.built.css" type="text/css" media="all">
+	<link rel="stylesheet" href="static/result_files/search_new.css" type="text/css">
+	<link rel="stylesheet" href="static/result_files/footer.css" type="text/css">
+</head>
+
+<body class="ac-gn-current-support">
+	<div class="Section Section--main">
+		<div class="Section-content">
+			<div id="main" role="main">
+				<div>
+					<!-- Start : Input Search Bar -->
+					<div class="SearchBar">
+						<form action="search" method="get" id="searchForm" class="Search-form">
+							<input class="SearchForm-input" id="searchInput" placeholder="fakeGZS为您提供搜索服务" name="text" spellcheck="false" type="text" value="{{ user_input }}" role="combobox">
+							<button class="SearchForm-submit" type="submit"> </button>
+						</form>
+					</div>
+					<!--  End : Input Search Bar -->
+
+					<div class="SearchResults">
+						<div aria-live="polite" role="status" id="updateResultsText">
+							<span class="SearchResults-count"> <span id="total_rslt"> 下面是所有的新闻 </span>
+						</div>
+
+						<!--  Managed Answer -->
+						<ul class="SearchResultsList SearchResults-list js-searchResultsList u-md-size-8-12" id="results-Support-ul" aria-labelledby="paginationLabelText">
+
+							{% for item in item_list %}
+							<li class="SearchResult SearchResult--document"><a class="SearchResult-headingLink" href="{{ item.url }} "><h2 class="SearchResult-heading"> {{ item.title }} </h2><p class="SearchResult-description"><span class="SearchResult-date"> {{ item.date }} </span><span>{{ item.brief }}</span></p></a></li>
+							{% endfor %}
+
+							<input type="hidden" id="invokeDTM" value="invokeDTM"></ul>
+
+							<nav class="SearchPagination">
+								<form class="SearchPagination-form" action="all" method="get">
+									<a class="SearchPagination-paddle SearchPagination-paddle--left">
+							</a>
+									<span class="SearchPagination-count">  <input class="SearchPagination-input" name="pager" type="text" value="{{ current_page }}">
+								<span>/</span>
+									<span id="totalPages"> {{ total_pages }} </span>
+									</span>
+									<a class="SearchPagination-paddle SearchPagination-paddle--right">
+							</a>
+								</form>
+							</nav>
+					</div>
+				</div>
+			</div>
+			<!--/main-->
+		</div>
+	</div>
+</body>
+
+</html>
