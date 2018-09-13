@@ -124,7 +124,7 @@
     - First there is the page rating function which means that you give the function a page id and several keywords (sorted in importance), the function will return a value that shows the degree of correlation (the value is between 0 and 1).
     - *keys_score*, *title_ratio* and *content_ratio* are the parameters of the functions which I will explain later.
     - If the value of the function is greater than *self.keys_limit*, the page will be an item of the result.
-    - The *self.freq_max* is the parameter of the recommanding system which means the length of the keyword history, the recommanded news will be based on the history.
+    - The *self.freq_max* is the parameter of the recommanding system which means the length of the keyword history, the recommanded news will be based on the history, by changing the parameters you can also let the recommanded pages only related to current page.
     - *self.max_brief_length* is the max length of the brief content of a news that will be showed in the result page.
 
   - To use the time filter while searching, the method is to add the interval of the time in your input. For example, if you want to search the news about '习近平' in a time interval of 2018.01.01 to 2018.09.13, you should input '**[2018.01.01 to 2018.09.13] 习近平**'.
@@ -182,10 +182,17 @@
 
   - For the CSS file and JavaScript, I haven't learned about this, all are copied from the website of apple.com...
 
+
 #### About the code
 
-- Spider/analyze.py
-  - analyze
+- Spider
+  - Spider/analyze.py: cut the content and analyze, but not processing format problem
+  - Spider/log.py: logging system of spider
+  - Spider/parse.py: parse the content from a page
+  - Spider/spider.py: program entrance and core
+- Engine
+  - sqldb_server.py: searching core
+  - view.py: handling user's request and return results
 
 
 
