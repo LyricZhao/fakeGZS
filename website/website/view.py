@@ -7,6 +7,7 @@ from django.shortcuts import render_to_response
 from . import sqldb_server
 
 import re
+import time
 
 print 'Starting searching engine core ...'
 engine = sqldb_server.sqldb('../pages.db')
@@ -38,6 +39,7 @@ def get_item_list(ids, l, r, keys):
     return item_list
 
 def search(request):
+    t0 = time.time()
     request.encoding = 'utf-8'
     if 'text' in request.GET:
         pass
@@ -86,6 +88,7 @@ def search(request):
     mapped['item_list'] = get_item_list(ids, rangeL, rangeR, strongs)
     mapped['current_page'] = str(page_no)
     mapped['total_pages'] = str(total_pages)
+    mapped['timer'] = str(time.time() - t0)
 
     return render(request, 'result.html', mapped)
 
